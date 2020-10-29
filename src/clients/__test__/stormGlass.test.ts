@@ -6,6 +6,8 @@ import * as HTTPUtil from "@src/util/request";
 jest.mock('@src/util/request');
 
 describe('StormGlass Client', () => {
+    const MockedRequestClass = HTTPUtil.Request as jest.Mocked<typeof HTTPUtil.Request>;
+
     const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
     const lat = -33.792726;
     const lng = 151.289824;
@@ -51,6 +53,9 @@ describe('StormGlass Client', () => {
     });
 
     it('should get an StormGlassResponseError when the StormGlass service responds with error', async () => {
+
+        MockedRequestClass.isRequestError.mockReturnValue(true);
+
         mockedRequest.get.mockRejectedValue({
           response: {
             status: 429,
